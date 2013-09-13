@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>WebRTC - the basics</title>
+
+        <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+        <meta name="author" content="Hakim El Hattab">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="revealjs/css/reveal.min.css">
+        <link rel="stylesheet" href="revealjs/css/theme/default.css" id="theme">
+
+        <link rel="stylesheet" href="revealjs/lib/css/zenburn.css">
+
+        <link rel="stylesheet" href="css/styles.css">
+        
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="revealjs/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+            
+        </script>
+
+        
+        <!--[if lt IE 9]>
+        <script src="revealjs/lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body id="body">
+
+        <div class="reveal">
+
+            <div class="slides">
+                <section data-transition="linear" data-background="#8c4738" data-background-transition="slide">
+                    <h1>WebRTC</h1>
+                    <h2>The basics</h2>
+                    <p>Stefan Aebischer - Freelance Webdeveloper</p>
+                </section>   
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>Agenda</h2>
+                    <ul>
+                        <li class="fragment">What is WebRTC</li>
+                        <li class="fragment">The APIs</li>
+                        <li class="fragment">Signaling server</li>
+                        <li class="fragment">NAT traversal</li>
+                        <li class="fragment">Working Demo (Hopefully)</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Back in the days</h2>
+                    <img src="http://www.scenicreflections.com/files/Et_phone_home_Wallpaper__yvt2.jpg" />
+                </section>
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>Realtime communication without plugins</h2>
+                    <p>low cost P2P communication</p>
+                    <p class="fragment">high qualtiy audio and video</p>
+                    <p class="fragment">and data</p>
+                </section>
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>Supported browsers and devices</h2>
+                    <ul>
+                        <li>Chrome</li>
+                        <li>Firefox</li>
+                        <li>Opera</li>
+                        <li>Chrome for Android</li>
+                        <li>Native Objective-C and Java bindings</li>
+                    </ul>
+                </section>
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>1,000,000,000+ WebRTC Clients</h2>
+                    <img src="img/browser.jpg" />
+                    <p style="font-size: 0.5em;">Illustration by <a href="http://www.ps-illustration.com" target="_blank">Patric Sandri</a></p>
+                </section> 
+                <section data-transition="linear" data-background="#8c4738" data-background-transition="slide">
+                    <h1>WebRTC - the APIs</h1>
+                </section>   
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>Three main JavaScript APIs</h2>
+                    <ul>
+                        <li>navigator.getUserMedia</li>
+                        <li>RTCPeerConnection</li>
+                        <li>RTCDataChannel</li>
+                    </ul>
+                </section>
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>Adapter.js from Google</h2>
+                    <ul>
+                        <li>Abstracts Chrome/Firefox differences</li>
+                        <li>Removes vendor prefixes</li>
+                    </ul>
+                </section>
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>getUserMedia</h2>
+                    <p>Access microphone and camera</p>
+                    <pre><code data-trim contenteditable>
+var mediaConstraints = {audio: true, video: true};
+
+function requestMedia() {
+    getUserMedia(mediaConstraints, successCallback, errorCallback);
+}
+                    </code></pre>
+                </section>
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>Playback MediaStream</h2>
+                    <pre><code data-trim contenteditable>
+var localStream; 
+
+function sucessCallback(stream) {
+    //attach the stream to a video DOM node
+    attachMediaStream(
+        document.getElementById('local-video'), 
+        stream
+    );
+    
+    localStream = stream;
+}
+
+function errorCallback(error) {
+    //do something
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>ASCII Camera</h2>
+                    <p><a href="http://idevelop.ro/ascii-camera/" target="_blank">idevelop.ro/ascii-camera</a></p>
+                </section>
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h1>RTCPeerConnection</h1>
+                    <p>Communicate Media Streams between peers</p>
+                </section>
+
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>What does RTCPeerConnection for us?</h2>
+                    <ul>
+                        <li>Peer to Peer communication</li>
+                        <li>NAT traversal</li>
+                        <li>Noise and echo reduction</li>
+                        <li>Jitter handling</li>
+                        <li>Compression / decompression</li>
+                        <li>Bandwidth management</li>
+                        <li>NSA protection</li>
+                    </ul>
+                </section>
+                
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>RTCPeerConnection Architecture</h2>
+                    <img src="img/sdp.jpg" />
+                </section>
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>Alice calls Bob</h2>
+                    <pre><code data-trim contenteditable>
+var pc, isCaller = (user == 'Alice');
+
+function mayStartPc() {
+    pc = new RTCPeerConnection();
+    
+    pc.addStream(localStream);
+    
+    if(isCaller) pc.createOffer(onDescription);
+    
+    pc.onaddstream = gotRemoteStream;
+}
+
+function onDescription(description) {
+    pc.setLocalDescription(description);
+    
+    sendToOtherPeer(description);
+}
+                    </code></pre>
+                </section>
+
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>Bob recieves the offer and answers</h2>
+                    <pre><code data-trim contenteditable>
+mayStartPc();
+
+function processRemoteDescription(description) {
+    pc.setRemoteDescription(description);
+
+    if(description.type == 'offer') {
+        pc.createAnswer(onDescription);
+    }
+}
+                    </code></pre>
+                </section>
+
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>Connection established</h2>
+                    <pre><code data-trim contenteditable>
+function gotRemoteStream(stream) {
+    attachMediaStream(
+        document.getElementById('remote-video'), 
+        stream
+    );
+}                    
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Example</h2>
+                    <a href="http://simpl.info/pc" target="_blank">simpl.info/pc</a>
+                </section>
+
+
+                <section data-transition="linear" data-background="#8c4738" data-background-transition="slide">
+                    <h1>Signaling server</h1>
+                </section>
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>P2P. So why we need servers?</h2>
+                    <ul>
+                        <li>Transfer signals (offer/answer)</li>
+                        <li>Bypass NATs and Firewalls</li>
+                    </ul>
+                </section>
+                
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>Signaling Architecture</h2>
+                    <img src="img/signaling.jpg">
+                </section>
+                
+                <section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+                    <h2>Signaling Server in PHP</h2>
+                    <p><b>Websocket server on built on top of</b></p>
+                    <ul>
+                        <li><a href="http://socketo.me/" target="_blank">Ratchet</a></li>
+                        <li><a href="http://reactphp.org/" target="_blank">React PHP</a></li>
+                    </ul>
+                </section>
+                
+                <section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+                    <h2>Client connects</h2>
+                    <pre><code data-trim contenteditable>
+class SignalingServer  
+    implements MessageComponentInterface {
+    
+    public function onOpen(ConnectionInterface $conn) {
+        $partner = $this->findPartner($conn);
+
+        $msg = array(
+            'type' => 'handshake',
+            'isCaller' => $partner !== NULL
+        );
+
+        $conn->send(json_encode($msg));
+    }    
+}</code></pre>                
+                </section>
+                <section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+                    <h2>Relay signals sent by clients</h2>
+                    <pre><code data-trim contenteditable>
+class SignalingServer  
+    implements MessageComponentInterface {
+    
+    ...
+    
+    public function onMessage(ConnectionInterface $conn, $msg) {
+        $peer = $this->findPairedPeer($from);
+        
+        if($peer instanceof ConnectionInterface) {
+            $peer->send($msg);
+        }
+    }
+}</code></pre>      
+                </section>
+
+                
+                <section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+                    <h2>Start the server</h2>
+                    <pre><code data-trim contenteditable>
+&lt;?php
+use Ratchet\WebSocket\WsServer;
+use Ratchet\Server\IoServer;
+use RtcServer\SignalingServer;
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+$ws = new WsServer(new SignalingServer);
+
+IoServer::factory($ws, 8080)->run();
+
+?>
+                    </code></pre>
+                    <pre><code data-trim contenteditable>$ php server.php</code></pre>
+                </section>
+                
+                <section data-transition="linear" data-background="#8c4738" data-background-transition="slide">
+                    <h1>NAT traversal</h1>
+                </section>
+                
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>The real world</h2>
+                    <img src="img/therealworld.jpg" />
+                </section>
+                
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>STUN</h2>
+                    <h3>Session Traversal Utilities for NAT</h3>
+                    <img src="img/stun.jpg" />
+                </section>
+                
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>TURN</h2>
+                    <h3>Traversal Using Relays around NAT</h3>
+                    <img src="img/turn.jpg" />
+                </section>
+                
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>ICE</h2>
+                    <h3>Interactive Connectivity Establishment</h3>
+                    <p>Find the best way to connect two peers</p>
+                </section>
+                
+                <section data-transition="linear" data-background="#34312F" data-background-transition="slide">
+                    <h2>ICE in Javascript</h2>
+                    <pre><code data-trim contenteditable>
+function mayStartPc() {
+    pc = new RTCPeerConnection(
+        {iceServers: [
+            {url: 'stun:stun.l.google.com:19302'}
+        ]} 
+    );
+
+    pc.onicecandidate = onIceCandidate;
+
+    ...
+}
+
+function onIceCandidate(candidate) {
+    sendToOtherPeer(candidate);
+}
+                    </code></pre>
+                </section>
+
+                <section data-transition="linear" data-state="remove-video" data-background="#34312F" data-background-transition="slide">
+                    <h2>Process incoming ICE Candidate</h2>
+                    <pre><code data-trim contenteditable>
+function processRemoteCandidate(candidate) {
+    pc.addIceCandidate(
+        new RTCIceCandidate(candidate)
+    );
+}
+                   </code></pre>
+                </section>
+                
+                
+                <section data-background="#8c4738" data-state="video" data-transition="linear" data-background-transition="slide">
+                    <h1>Demo time</h1>
+                    <div>
+                        <div id="video-slide-container">
+                            <div id="video-slide-inner"></div>
+                        </div>
+                    </div>
+                    <p><span onclick="requestMedia();">Click me</span></p>
+                </section>
+
+                <section data-transition="linear" data-state="video-persist" data-background="#8c4738" data-background-transition="slide">
+                    <h1>Muito Obrigado</h1>
+                    <p>
+                        This talk was inspired by <a href="http://www.arcticmonkeys.com/" target="_blank">Arctic Monkeys</a> and the talk "<a href="http://www.youtube.com/watch?v=p2HzZkd2A40" target="_blank">WebRTC - Plugin-free realtime communication</a>" from Justin Uberti / Sam Dutton at Google I/O
+                    </p>
+                </section>   
+                
+
+            </div>
+
+        </div>
+        <div id="remote-video-container">
+            <video id="remote-video" autoplay></video>
+            <div id="local-video-container">
+                <video id="local-video" muted="true" autoplay></video>
+            </div>
+        </div>
+        
+        <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+        
+        <script src="js/adapter.js"></script>
+        <script src="js/app.js"></script>
+        
+        <script src="revealjs/lib/js/head.min.js"></script>
+        <script src="revealjs/js/reveal.min.js"></script>
+
+        <script>
+            Reveal.initialize({
+                controls: false,
+                progress: false,
+                history: true,
+                center: true,
+
+                transition: 'default',
+                dependencies: [
+                    { src: 'revealjs/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+            });
+            
+            var videoContainer = $('#remote-video-container');
+            var videoPositioned = false;
+            
+            Reveal.addEventListener('video', function(event) {
+                var body = $('body');
+                
+                if(videoPositioned) {
+                    videoContainer.addClass('video-active').removeClass('video-transition-small').addClass('video-transition-big');
+                } else {
+                    videoPositioned = true;
+                    event.srcElement.addEventListener( 'webkitTransitionEnd', function( event ) { 
+                        var videoPlaceholder = $('#video-slide-container');
+                        var videoContainerOffset = videoPlaceholder.offset();
+                
+                        body.append('<style>'+
+                        '#remote-video-container {'+
+                        '    position: absolute;'+
+                        '    bottom: '+ (body.height() - videoContainerOffset.top  - videoPlaceholder.height()) + 'px;'+
+                        '    right: '+ (body.width() - videoContainerOffset.left - videoPlaceholder.width()) + 'px;'+
+                        '    width: '+ videoPlaceholder.width() + 'px;'+
+                        '    height: '+ videoPlaceholder.height() + 'px;'+
+                        '}'+
+                        '</style>');
+                
+                        this.removeEventListener('webkitTransitionEnd', arguments.callee, false);
+                    
+                        videoContainer.addClass('video-fade-in').addClass('video-active');
+                    }, false );
+                }
+            });
+            
+            Reveal.addEventListener('video-persist', function(event) {
+                videoContainer.removeClass('video-transition-big').addClass('video-transition-small');
+            });
+
+            Reveal.addEventListener('video-remove', function(event) {
+                videoContainer.removeClass('video-active').removeClass('video-fade-in').removeClass('video-transition-small').removeClass('video-transition-big');
+            });
+
+        </script>
+        
+    </body>
+</html>

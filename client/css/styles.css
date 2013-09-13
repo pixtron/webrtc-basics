@@ -1,0 +1,40 @@
+#remote-video-container {
+    background: #eee url(../img/loader.gif) no-repeat center center;
+    position: relative;
+    width: 640px;
+    height: 480px;
+    margin: 100px auto;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+
+#local-video-container {
+    width: 160px;
+    height: 120px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border: 1px solid #aaa;
+    background-color: #eee;
+    border-radius: 3px;
+}
+
+video {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#not-supported {
+    width: 600px;
+    display: none;
+    margin: 50px auto;
+}
+
+
+.no-supported #not-supported {
+    display: block;
+}
+
+.no-supported #remote-video-container {
+    display: none;
+}

@@ -1,0 +1,79 @@
+#remote-video-container {
+    background: #eee url(../img/loader.gif) no-repeat center center;
+    position: relative;
+    width: 640px;
+    height: 480px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    box-shadow: 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 20px 20px rgba(0, 0, 0, 0.15);
+    margin: 0 auto;
+    opacity: 0;
+    visibility: hidden;
+    right: auto;
+    bottom: auto;
+}
+
+#local-video-container {
+    width: 160px;
+    height: 120px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border: 1px solid #aaa;
+    background-color: #eee;
+    border-radius: 3px;
+}
+#video-slide-container {
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+}
+
+#video-slide-inner {
+    height: 0;
+    padding-bottom: 75%;
+}
+
+#remote-video-container video {
+    position: absolute;
+    left: 0;
+    top: 0;
+    max-width: 100%;
+    max-height: 100%;
+    height: 100%;
+    width: 100%;
+}
+
+#remote-video-container.video-active {
+    visibility: visible;
+    opacity: 1;
+}
+
+#remote-video-container.video-transition-big {
+    margin: 0;
+    border-radius: 5px;
+    transition: right 0.5s linear, bottom 0.5s linear, width 0.5s linear, height 0.5s linear;
+}
+
+#remote-video-container.video-transition-small {
+    margin: 0;
+    width: 16.7101827676256%;
+    height: 0;
+    padding-bottom: 12.53263707571923%;
+    border-radius: 3px;
+    bottom: 10px;
+    right: 10px;
+    transition: right 0.5s linear, bottom 0.5s linear, width 0.5s linear, height 0.5s linear;
+}
+
+#remote-video-container.video-fade-in {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0.1s linear, opacity 0.5s linear;
+}
+
+#remote-video-container.video-transition-small #local-video-container {
+    visibility: hidden;
+    opacity: 0;
+}
